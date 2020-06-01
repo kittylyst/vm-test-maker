@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+//        local()
         mavenCentral()
     }
     dependencies {
@@ -17,11 +18,11 @@ plugins {
 
 group = "org.adoptopenjdk"
 
-apply(plugin = "com.github.sherter.google-java-format")
+//apply(plugin = "com.github.sherter.google-java-format")
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_14
+    targetCompatibility = JavaVersion.VERSION_14
     disableAutoTargetJvm()
     withSourcesJar()
 }
