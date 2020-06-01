@@ -13,7 +13,8 @@ import java.util.Map;
 import org.objectweb.asm.ClassWriter;
 
 public class MainMaker {
-  private final static Map<String, Byte> opcodeLookup = new HashMap<>();
+  private static final Map<String, Byte> opcodeLookup = new HashMap<>();
+  private static final String PACKAGE = "ocelot";
 
   private ClassWriter cw = new ClassWriter(0);
 
@@ -40,6 +41,11 @@ public class MainMaker {
     }
   }
 
+  static String normalizeName(String sName) {
+    var parts = sName.split("/");
+    return parts[parts.length - 1];
+  }
+
   public static void main(String[] args) {
     if (args.length < 1) {
       System.err.println("Usage: MainMaker <files>");
@@ -49,9 +55,10 @@ public class MainMaker {
     init();
     MainMaker m = new MainMaker();
     try {
-      for (var fName : args) {
-        var asm = Files.readAllLines(Path.of(fName)).stream().map(l -> normalizeLine(l)).collect(toList());
-        Files.write(Paths.get(fName + ".class"), m.serializeToBytes(fName, asm.toArray(new String[0])));
+      for (var sName : args) {
+        var asm = Files.readAllLines(Path.of(sName)).stream().map(l -> normalizeLine(l)).collect(toList());
+        var fName = PACKAGE +"/"+ normalizeName(sName);
+        Files.write(Paths.get(sName + ".class"), m.serializeToBytes(fName, asm.toArray(new String[0])));
       }
     } catch (IOException e) {
       e.printStackTrace();
